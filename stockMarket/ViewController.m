@@ -88,7 +88,7 @@ static NSString * kToken =
         [JSONPatch applyPatches:patch toCollection:dataObject];
     }
     
-    [self sendDataObject];
+    [self sendDataObject:dataObject];
     
     [tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 }
@@ -104,9 +104,9 @@ static NSString * kToken =
 }
 
 // This method sends a notification with the current dataObject to the Watch app via the WatchConnectivity session.
--(void)sendDataObject
+-(void)sendDataObject:(NSArray *)myDataObject
 {
-    NSDictionary *applicationDict = @{@"dataObject":dataObject};
+    NSDictionary *applicationDict = @{@"dataObject":myDataObject};
     [self.watchSession updateApplicationContext:applicationDict error:nil];
 
     NSLog(@"Notification sent");

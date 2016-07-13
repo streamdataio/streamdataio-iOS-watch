@@ -31,20 +31,20 @@
 - (void)awakeWithContext:(id)context
 {
     [super awakeWithContext:context];
-    
-    // If this device can support a WatchConnectivity session, activate this session.
-    if ([WCSession isSupported])
-    {
-        WCSession *session = [WCSession defaultSession];
-        session.delegate = self;
-        [session activateSession];
-    }
 }
 
 - (void)willActivate
 {
     // This method is called when watch view controller is about to be visible to user
     [super willActivate];
+    
+    // If this device can support a WatchConnectivity session, activate this session.
+    if ([WCSession isSupported])
+    {
+        self.watchSession = [WCSession defaultSession];
+        self.watchSession.delegate = self;
+        [self.watchSession activateSession];
+    }
 }
 
 - (void)didDeactivate
@@ -68,16 +68,14 @@
 - (void)setupTable
 {
     NSArray *sortedData = [dataObject sortedArrayUsingComparator:
-                     ^NSComparisonResult(id obj1, id obj2) {
-                         NSLog(@"price1 = %@", [obj1 objectForKey:@"price"]);
-                         NSLog(@"price2 = %@", [obj2 objectForKey:@"price"]);
-                         if ([obj1 objectForKey:@"price"] < [obj2 objectForKey:@"price"])
-                         { return NSOrderedDescending; }
-                         else if ([obj1 objectForKey:@"price"] > [obj2 objectForKey:@"price"])
-                         { return NSOrderedAscending; }
-                         else
-                         { return NSOrderedSame; }
-                     }];
+                ^NSComparisonResult(id obj1, id obj2) {
+                    if ([[obj1 objectForKey:@"price"] integerValue] < [[obj2 objectForKey:@"price"] integerValue])
+                    {  return NSOrderedDescending; }
+                    else if ([[obj1 objectForKey:@"price"] integerValue] > [[obj2 objectForKey:@"price"] integerValue])
+                    { return NSOrderedAscending; }
+                    else
+                    { return NSOrderedSame; }
+                }];
     
     [self.watchTableView setNumberOfRows:sortedData.count withRowType:@"WatchRow"];
     

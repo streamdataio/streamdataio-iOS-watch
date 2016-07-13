@@ -22,6 +22,9 @@
 
 @interface InterfaceController : WKInterfaceController <WCSessionDelegate>
 
+// The WatchConnectivity session for communicating with the iPhone app
+@property (nonatomic) WCSession* watchSession;
+
 @property (unsafe_unretained, nonatomic) IBOutlet WKInterfaceTable *watchTableView;
 
 @end
