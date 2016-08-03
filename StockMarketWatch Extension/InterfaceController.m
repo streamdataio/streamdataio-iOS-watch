@@ -53,12 +53,12 @@
     [super didDeactivate];
 }
 
-// This method is called when a new notification is received from the iPhone app via the WatchConnectivity session.
-- (void)session:(nonnull WCSession *)session didReceiveApplicationContext:(nonnull NSDictionary *)applicationContext
+// This method is called when a new notification message is received from the iPhone app via the WatchConnectivity session.
+- (void)session:(nonnull WCSession *)session didReceiveMessage:(nonnull NSDictionary *)message
 {
-    NSLog(@"Notification received");
-
-    dataObject = [applicationContext objectForKey:@"dataObject"];
+    NSLog(@"Message received");
+    
+    dataObject = [message objectForKey:@"dataObject"];
     NSLog(@"dataObject = %@", dataObject);
     
     [self setupTable];

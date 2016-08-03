@@ -103,13 +103,20 @@ static NSString * kToken =
     NSLog(@"Event failed with error");
 }
 
-// This method sends a notification with the current dataObject to the Watch app via the WatchConnectivity session.
+// This method sends a notification message with the current dataObject to the Watch app via the WatchConnectivity session when the watch is reachable.
 -(void)sendDataObject:(NSArray *)myDataObject
 {
-    NSDictionary *applicationDict = @{@"dataObject":myDataObject};
-    [self.watchSession updateApplicationContext:applicationDict error:nil];
-
-    NSLog(@"Notification sent");
+    if ([self.watchSession isReachable])
+    {
+        NSDictionary *applicationDict = @{@"dataObject":myDataObject};
+        [self.watchSession sendMessage:applicationDict
+                          replyHandler:^(NSDictionary *replyHandler) { }
+                          errorHandler:^(NSError *error) { }
+         ];
+        NSLog(@"Message sent");
+    }
+    else
+    { NSLog(@"Watch unreachable"); }
 }
 
 #pragma mark - UITableViewDataSource
